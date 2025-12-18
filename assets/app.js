@@ -1,5 +1,15 @@
-// ===== BASE PATH (GitHub Pages + IIS compatible) =====
-const BASE_PATH = location.pathname.startsWith("/bieumau/") ? "/bieumau/" : "/";
+// ===== UNIVERSAL BASE PATH (IIS + GitHub Pages) =====
+// Example:
+//  - https://buchivinh.github.io/bieumau/  -> /bieumau/
+//  - http://localhost/                    -> /
+//  - http://localhost/bieumau/            -> /bieumau/
+
+const BASE_PATH = (() => {
+  const path = location.pathname;
+  if (path === "/" || path.endsWith("/index.html")) return "/";
+  const parts = path.split("/").filter(Boolean);
+  return parts.length > 1 ? `/${parts[0]}/` : "/";
+})();
 
 const FOLDERS = [
   { key: "bieumau-bscs", title: "Bổ sung chỉnh sửa" },
@@ -83,7 +93,7 @@ closeBtn.onclick = closeModal;
 
 search.oninput = e => renderTree(e.target.value);
 
-// Dark mode
+// Dark mode (remembered)
 darkToggle.onclick = () => {
   document.documentElement.classList.toggle("dark");
   localStorage.setItem("dark", document.documentElement.classList.contains("dark"));
