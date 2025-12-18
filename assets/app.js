@@ -1,3 +1,6 @@
+// ===== BASE PATH (GitHub Pages + IIS compatible) =====
+const BASE_PATH = location.pathname.startsWith("/bieumau/") ? "/bieumau/" : "/";
+
 const FOLDERS = [
   { key: "bieumau-bscs", title: "Bổ sung chỉnh sửa" },
   { key: "bieumau-dxyt", title: "Đề xuất ý tưởng" },
@@ -7,8 +10,13 @@ const FOLDERS = [
 const state = JSON.parse(localStorage.getItem("treeState") || "{}");
 
 async function loadJSON(key) {
-  const res = await fetch(`data/${key}.json`);
-  return await res.json();
+  try {
+    const res = await fetch(`${BASE_PATH}data/${key}.json`);
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
 }
 
 async function renderTree(filter = "") {
@@ -18,6 +26,8 @@ async function renderTree(filter = "") {
 
   for (const f of FOLDERS) {
     const data = await loadJSON(f.key);
+    if (!Array.isArray(data)) continue;
+
     const matched = data.filter(x =>
       (x.name + (x.note || "")).toLowerCase().includes(filter)
     );
@@ -66,17 +76,14 @@ function openModal(x) {
   modal.classList.remove("hidden");
 }
 
-function closeModal() {
-  modal.classList.add("hidden");
-}
+function closeModal() { modal.classList.add("hidden"); }
 
-modal.onclick = (e) => {
-  if (e.target === modal) closeModal();
-};
+modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 closeBtn.onclick = closeModal;
 
 search.oninput = e => renderTree(e.target.value);
 
+// Dark mode
 darkToggle.onclick = () => {
   document.documentElement.classList.toggle("dark");
   localStorage.setItem("dark", document.documentElement.classList.contains("dark"));
