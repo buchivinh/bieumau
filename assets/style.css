@@ -13,28 +13,55 @@ header{
 }
 .actions{display:flex;gap:6px;align-items:center}
 
+/* ===== TREE BASIC ===== */
 .tree,.tree ul{
   list-style:none;
   padding-left:20px;
   margin:0;
 }
 .tree ul{display:none}
+.tree li{
+  line-height:1.9;
+  position:relative;
+}
 
-.tree li{line-height:1.9}
+/* ===== EXPLORER TREE LINES ===== */
+.tree li::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:8px;
+  height:100%;
+  border-left:1px solid #cbd5e1;
+}
+.tree li::after{
+  content:"";
+  position:absolute;
+  top:12px;
+  left:8px;
+  width:12px;
+  border-top:1px solid #cbd5e1;
+}
+.tree > li::before,
+.tree > li::after{
+  display:none;
+}
 
+/* ===== ICONS ===== */
 .folder{
   cursor:pointer;
   font-weight:600;
 }
 .folder::before{
   content:"▸ ";
-  width:18px;
   display:inline-block;
+  width:18px;
 }
 .folder.open::before{
   content:"▾ ";
 }
-
-.file::before{content:"📄 "}
+.file::before{
+  content:"📄 ";
+}
 
 .dark body{background:#0f172a;color:#e5e7eb}

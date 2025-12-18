@@ -1,21 +1,9 @@
 // ===== BASE PATH FIX (GitHub Pages + IIS) =====
-// Works for:
-//  - /
-//  - /index.html
-//  - /bieumau/
-//  - /bieumau/index.html
-
 const BASE_PATH = (() => {
   const p = location.pathname;
-
-  // root
   if (p === '/' || p === '/index.html') return '/';
-
-  // /repo/ or /repo/index.html
   const parts = p.split('/').filter(Boolean);
-  if (parts.length >= 1) {
-    return `/${parts[0]}/`;
-  }
+  if (parts.length >= 1) return `/${parts[0]}/`;
   return '/';
 })();
 
@@ -107,7 +95,6 @@ exportBtn.onclick = async () => {
 };
 
 search.oninput = render;
-
 darkToggle.onclick = () =>
   document.documentElement.classList.toggle("dark");
 
