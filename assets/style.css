@@ -5,13 +5,13 @@ body{
   background:#f6f7fb; /* nền xám nhạt toàn trang */
 }
 
-/* ===== HEADER (ĐÃ ĐỒNG BỘ MÀU) ===== */
+/* ===== HEADER ===== */
 header{
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:10px 16px;
-  background:#f6f7fb;          /* 🔥 đồng bộ với body */
+  background:#f6f7fb;
   border-bottom:0px solid #e5e7eb;
   flex-wrap:wrap;
   gap:8px;
@@ -34,15 +34,30 @@ header{
 
 /* ===== LEFT (TREE) ===== */
 .left{
-  padding:12px 12px 40px 16px;
+  padding:20px 16px 40px 20px;
   border-right:0px solid #e5e7eb;
   background:#f6f7fb;
 }
 
 /* ===== RIGHT (DETAIL AREA) ===== */
 .right{
-  padding:20px 28px;
-  background:#f6f7fb; /* cùng màu với header + body */
+  padding:24px 32px;
+  background:#f6f7fb;
+}
+
+/* ===== CARD CHUNG (TREE + DETAIL) ===== */
+.card{
+  background:#ffffff;
+  border-radius:14px;
+  padding:20px 22px;
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.04),
+    0 8px 24px rgba(0,0,0,0.04);
+}
+
+/* ===== TREE CONTAINER ===== */
+.tree-container{
+  max-width:420px;
 }
 
 /* ===== TREE ===== */
@@ -59,7 +74,7 @@ header{
 
 .tree li{
   position:relative;
-  line-height:1.8;
+  line-height:1.9;
 }
 
 /* ===== TREE LINES (Explorer style) ===== */
@@ -93,7 +108,7 @@ header{
   display:inline-flex;
   align-items:center;
   gap:6px;
-  padding:4px 6px;
+  padding:6px 8px;
   border-radius:4px;
 }
 
@@ -113,17 +128,12 @@ header{
   outline:1px solid #99caff;
 }
 
-/* ===== DETAIL PANEL (NỔI NHẸ) ===== */
+/* ===== DETAIL PANEL ===== */
 .detail-box{
-  background:#ffffff;
-  border-radius:12px;
-  padding:20px 24px;
-  max-width:720px;
-
-  /* nổi nhẹ nhưng không gắt */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  max-width:680px;   /* gọn hơn, đỡ trống */
 }
 
+/* ===== DETAIL CONTENT ===== */
 .detail-box h2{
   margin-top:0;
 }
