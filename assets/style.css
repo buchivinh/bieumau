@@ -1,7 +1,8 @@
+/* ===== GLOBAL ===== */
 body{
-  font-family: "Times New Roman", Times, serif;
+  font-family: "Times New Roman", Arial, Helvetica, serif;
   margin:0;
-  background:#f6f7fb;
+  background:#f6f7fb; /* nền xám nhạt đồng bộ */
 }
 
 /* ===== HEADER ===== */
@@ -10,18 +11,19 @@ header{
   justify-content:space-between;
   align-items:center;
   padding:10px 16px;
-  background:#fff;
-  border-bottom:0px solid #ddd;
+  background:#ffffff;
+  border-bottom:1px solid #e5e7eb;
   flex-wrap:wrap;
   gap:8px;
 }
+
 .actions{
   display:flex;
   gap:6px;
   flex-wrap:wrap;
 }
 
-/* ===== LAYOUT (PC) ===== */
+/* ===== LAYOUT ===== */
 .layout{
   display:grid;
   grid-template-columns: 320px 1fr;
@@ -30,28 +32,37 @@ header{
   min-height: calc(100vh - 60px);
 }
 
+/* ===== LEFT (TREE) ===== */
 .left{
   padding:12px 12px 40px 16px;
-  border-right:0px solid #e5e7eb;
+  border-right:1px solid #e5e7eb;
+  background:#f6f7fb;
 }
 
+/* ===== RIGHT (DETAIL AREA) ===== */
 .right{
-  padding:16px 24px;
+  padding:20px 28px;
+  background:#f6f7fb; /* đồng bộ với body */
 }
 
 /* ===== TREE ===== */
-.tree, .tree ul{
+.tree,
+.tree ul{
   list-style:none;
   margin:0;
   padding-left:18px;
 }
-.tree ul{display:none}
+
+.tree ul{
+  display:none;
+}
+
 .tree li{
   position:relative;
   line-height:1.8;
 }
 
-/* ===== TREE LINES ===== */
+/* ===== TREE LINES (Explorer style) ===== */
 .tree li::before{
   content:"";
   position:absolute;
@@ -61,6 +72,7 @@ header{
   height:100%;
   background:#cbd5e1;
 }
+
 .tree li::after{
   content:"";
   position:absolute;
@@ -70,6 +82,7 @@ header{
   height:1px;
   background:#cbd5e1;
 }
+
 .tree > li::before,
 .tree > li::after{
   display:none;
@@ -83,42 +96,55 @@ header{
   padding:4px 6px;
   border-radius:4px;
 }
-.node.file{cursor:pointer}
+
+.node.file{
+  cursor:pointer;
+}
 
 /* ===== ICONS ===== */
-.folder-icon, .file-icon{width:20px}
+.folder-icon,
+.file-icon{
+  width:20px;
+}
 
-/* ===== SELECTION ===== */
+/* ===== SELECTION (Explorer-like) ===== */
 .node.selected{
   background:#cce4ff;
   outline:1px solid #99caff;
 }
 
-/* ===== DETAIL PANEL ===== */
-.placeholder{
-  color:#64748b;
-  font-size:12px;
-}
+/* ===== DETAIL PANEL (NỔI NHẸ) ===== */
 .detail-box{
-  background:#fff;
-  border:1px solid #e5e7eb;
+  background:#ffffff;
   border-radius:12px;
-  padding:20px;
+  padding:20px 24px;
   max-width:720px;
+
+  /* hiệu ứng nổi nhẹ */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
+
 .detail-box h2{
   margin-top:0;
 }
+
 .detail-actions{
   margin-top:16px;
 }
+
 .detail-actions a{
   display:inline-block;
-  padding:8px 14px;
+  padding:8px 16px;
   background:#2563eb;
-  color:#fff;
+  color:#ffffff;
   border-radius:8px;
   text-decoration:none;
+}
+
+/* ===== PLACEHOLDER / HINT ===== */
+.placeholder{
+  color:#475569;
+  font-size:16px;
 }
 
 /* ===== MOBILE ===== */
@@ -126,8 +152,24 @@ header{
   .layout{
     grid-template-columns: 1fr;
   }
+
   .left{
     border-right:none;
     border-bottom:1px solid #e5e7eb;
+  }
+
+  .right{
+    padding:16px;
+  }
+
+  .node{
+    font-size:15px;
+    padding:6px 6px;
+  }
+}
+
+@media (max-width: 480px){
+  .node{
+    font-size:16px;
   }
 }
