@@ -1,9 +1,22 @@
-// ===== Universal base path =====
+// ===== BASE PATH FIX (GitHub Pages + IIS) =====
+// Works for:
+//  - /
+//  - /index.html
+//  - /bieumau/
+//  - /bieumau/index.html
+
 const BASE_PATH = (() => {
   const p = location.pathname;
-  if (p === '/' || p.endsWith('index.html')) return '/';
-  const s = p.split('/').filter(Boolean);
-  return s.length > 1 ? `/${s[0]}/` : '/';
+
+  // root
+  if (p === '/' || p === '/index.html') return '/';
+
+  // /repo/ or /repo/index.html
+  const parts = p.split('/').filter(Boolean);
+  if (parts.length >= 1) {
+    return `/${parts[0]}/`;
+  }
+  return '/';
 })();
 
 const STRUCTURE = [
@@ -51,7 +64,6 @@ async function render(){
       ul.appendChild(f);
     });
 
-    // Auto expand when searching
     if(kw){
       ul.style.display = "block";
       folder.classList.add("open");
