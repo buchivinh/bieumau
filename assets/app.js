@@ -9,7 +9,8 @@ const BASE_PATH = (() => {
 const STRUCTURE = [
   { title: "Bổ sung chỉnh sửa", key: "bieumau-bscs" },
   { title: "Đề xuất ý tưởng", key: "bieumau-dxyt" },
-  { title: "Đánh giá chất lượng", key: "bieumau-danhgianhanh" }
+  { title: "Đánh giá chất lượng", key: "bieumau-danhgianhanh" },
+{ title: "Đánh giá nhân sự", key: "bieumau-ns" }
 ];
 
 let selectedNode = null;
