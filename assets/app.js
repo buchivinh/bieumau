@@ -10,6 +10,7 @@ const STRUCTURE = [
   { title: "Bổ sung chỉnh sửa", key: "bieumau-bscs" },
   { title: "Đề xuất ý tưởng", key: "bieumau-dxyt" },
   { title: "Đánh giá chất lượng", key: "bieumau-danhgianhanh" }
+{ title: "Đánh giá chất lượng1", key: "bieumau-danhgianhanh" }
 ];
 
 async function loadJSON(key){
