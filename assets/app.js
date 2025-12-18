@@ -29,6 +29,7 @@ function showDetail(item){
   const panel = document.getElementById("detail");
   panel.innerHTML = `
     <div class="detail-box">
+	<h2>${item.name}</h2>
            <p>${item.note || "Không có mô tả"}</p>
       <div class="detail-actions">
         <a href="${item.url}" target="_blank">Mở biểu mẫu</a>
