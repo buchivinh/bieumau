@@ -16,8 +16,15 @@ header {
   background: #fff;
   border-bottom: 1px solid #ddd;
 }
-.dark header { background:#020617; border-color:#1e293b }
-.actions { display:flex; gap:8px; align-items:center }
+.dark header {
+  background:#020617;
+  border-color:#1e293b;
+}
+.actions {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
 #search {
   padding: 6px 10px;
   border-radius: 8px;
@@ -27,7 +34,9 @@ header {
   list-style: none;
   padding-left: 20px;
 }
-.tree li { line-height: 1.9 }
+.tree li {
+  line-height: 1.9;
+}
 .folder {
   font-weight: 700;
   cursor: pointer;
@@ -37,7 +46,9 @@ header {
   display: inline-block;
   width: 18px;
 }
-.folder.open::before { content: "▾ " }
+.folder.open::before {
+  content: "▾ ";
+}
 .file {
   padding-left: 18px;
   cursor: pointer;
@@ -46,9 +57,12 @@ header {
   background: #e0e7ff;
   border-radius: 6px;
 }
-.dark .file:hover { background:#334155 }
-.hidden { display:none }
-
+.dark .file:hover {
+  background:#334155;
+}
+.hidden {
+  display:none;
+}
 .modal {
   position: fixed;
   inset: 0;
@@ -64,7 +78,9 @@ header {
   width: 90%;
   max-width: 420px;
 }
-.dark .modal-box { background:#020617 }
+.dark .modal-box {
+  background:#020617;
+}
 .modal-actions {
   display: flex;
   gap: 10px;
