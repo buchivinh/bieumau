@@ -8,6 +8,7 @@
   <script src="assets/app.js" defer></script>
 </head>
 <body>
+
 <header>
   <h1>📚 DANH MỤC MẪU</h1>
   <div class="actions">
@@ -18,17 +19,26 @@
 </header>
 
 <main class="layout">
-  <section class="left">
-    <ul id="tree" class="tree"></ul>
-  </section>
 
-  <section class="right" id="detail">
-    <div class="placeholder">
-      <p>👈<span style="color:#2563eb; font-weight:600;">
-    Mời bạn chọn một thư mục và nhấn vào biểu mẫu để sử dụng
-  </span></p>
+  <!-- LEFT: TREE -->
+  <section class="left">
+    <div class="tree-container card">
+      <ul id="tree" class="tree"></ul>
     </div>
   </section>
+
+  <!-- RIGHT: DETAIL -->
+  <section class="right" id="detail">
+    <div class="detail-box card placeholder">
+      <p>
+        👉 <span style="color:#2563eb; font-weight:600;">
+          Mời bạn chọn một thư mục và nhấn vào biểu mẫu để sử dụng
+        </span>
+      </p>
+    </div>
+  </section>
+
 </main>
+
 </body>
 </html>
