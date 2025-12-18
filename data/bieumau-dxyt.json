@@ -1,7 +1,4 @@
 [
-  {
-    "name": "Biểu mẫu mẫu",
-    "url": "https://example.com",
-    "note": "Ghi chú mẫu"
-  }
+  {"name":"Biểu mẫu A","url":"https://example.com","note":"Demo"},
+  {"name":"Biểu mẫu B","url":"https://example.com","note":"Demo"}
 ]

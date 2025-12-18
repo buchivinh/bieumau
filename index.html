@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>BIỂU MẪU</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>BIỂU MẪU - Enterprise Tree</title>
   <link rel="stylesheet" href="assets/style.css">
   <script src="assets/app.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>📂 BIỂU MẪU</h1>
-    <div class="actions">
-      <input id="search" placeholder="🔍 Tìm biểu mẫu..." />
-      <button id="darkToggle">🌙</button>
-    </div>
-  </header>
-
-  <ul id="tree" class="tree"></ul>
-
-  <!-- Modal -->
-  <div id="modal" class="modal hidden">
-    <div class="modal-box">
-      <h3 id="mTitle"></h3>
-      <p id="mNote"></p>
-      <div class="modal-actions">
-        <a id="mLink" target="_blank">Mở biểu mẫu</a>
-        <button id="closeBtn">Đóng</button>
-      </div>
-    </div>
+<header>
+  <h1>📂 BIỂU MẪU</h1>
+  <div class="actions">
+    <input id="search" placeholder="🔍 Tìm biểu mẫu"/>
+    <button id="expandAll">Mở rộng</button>
+    <button id="collapseAll">Thu gọn</button>
+    <button id="exportBtn">Export CSV</button>
+    <select id="role">
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+    <button id="darkToggle">🌙</button>
   </div>
+</header>
+
+<ul id="tree" class="tree"></ul>
 </body>
 </html>

@@ -1,105 +1,90 @@
-// ===== UNIVERSAL BASE PATH (IIS + GitHub Pages) =====
-// Example:
-//  - https://buchivinh.github.io/bieumau/  -> /bieumau/
-//  - http://localhost/                    -> /
-//  - http://localhost/bieumau/            -> /bieumau/
-
-const BASE_PATH = (() => {
-  const path = location.pathname;
-  if (path === "/" || path.endsWith("/index.html")) return "/";
-  const parts = path.split("/").filter(Boolean);
-  return parts.length > 1 ? `/${parts[0]}/` : "/";
+// Universal base path
+const BASE_PATH = (()=>{
+  const p=location.pathname;
+  if(p==='/'||p.endsWith('index.html')) return '/';
+  const s=p.split('/').filter(Boolean);
+  return s.length>1?`/${s[0]}/`:'/';
 })();
 
-const FOLDERS = [
-  { key: "bieumau-bscs", title: "Bổ sung chỉnh sửa" },
-  { key: "bieumau-dxyt", title: "Đề xuất ý tưởng" },
-  { key: "bieumau-danhgianhanh", title: "Đánh giá chất lượng" }
+// Demo hierarchical model built at UI layer
+const STRUCTURE = [
+  {
+    title: "Bổ sung chỉnh sửa",
+    key: "bieumau-bscs",
+    children: [
+      { title: "Quản lý", role: ["admin","user"] },
+      { title: "Hành chính", role: ["admin"] }
+    ]
+  },
+  {
+    title: "Đề xuất ý tưởng",
+    key: "bieumau-dxyt",
+    children: []
+  },
+  {
+    title: "Đánh giá chất lượng",
+    key: "bieumau-danhgianhanh",
+    children: []
+  }
 ];
 
-const state = JSON.parse(localStorage.getItem("treeState") || "{}");
+let ROLE = "user";
 
-async function loadJSON(key) {
-  try {
-    const res = await fetch(`${BASE_PATH}data/${key}.json`);
-    if (!res.ok) return [];
-    return await res.json();
-  } catch {
-    return [];
-  }
+async function loadJSON(key){
+  try{
+    const r=await fetch(`${BASE_PATH}data/${key}.json`);
+    if(!r.ok) return [];
+    return await r.json();
+  }catch{return []}
 }
 
-async function renderTree(filter = "") {
-  const root = document.getElementById("tree");
-  root.innerHTML = "";
-  filter = filter.toLowerCase();
+async function render(){
+  const root=document.getElementById("tree");
+  root.innerHTML="";
+  const kw=search.value.toLowerCase();
 
-  for (const f of FOLDERS) {
-    const data = await loadJSON(f.key);
-    if (!Array.isArray(data)) continue;
+  for(const node of STRUCTURE){
+    const data=await loadJSON(node.key);
+    const li=document.createElement("li");
+    li.innerHTML=`<span class="folder">${node.title}</span><ul></ul>`;
+    const ul=li.querySelector("ul");
 
-    const matched = data.filter(x =>
-      (x.name + (x.note || "")).toLowerCase().includes(filter)
-    );
+    data.filter(x=>(x.name+(x.note||"")).toLowerCase().includes(kw))
+        .forEach(x=>{
+          const f=document.createElement("li");
+          f.className="file";
+          f.textContent=x.name;
+          ul.appendChild(f);
+        });
 
-    if (filter && matched.length === 0) continue;
-
-    const li = document.createElement("li");
-    const isOpen = state[f.key];
-
-    li.innerHTML = `
-      <span class="folder ${isOpen ? "open" : ""}">${f.title}</span>
-      <ul style="display:${isOpen ? "block" : "none"}"></ul>
-    `;
-
-    const ul = li.querySelector("ul");
-
-    matched.forEach(item => {
-      const file = document.createElement("li");
-      file.className = "file";
-      file.textContent = "📄 " + item.name;
-      file.onclick = (e) => {
-        e.stopPropagation();
-        openModal(item);
-      };
-      ul.appendChild(file);
-    });
-
-    li.querySelector(".folder").onclick = (e) => {
-      e.stopPropagation();
-      const open = ul.style.display === "block";
-      ul.style.display = open ? "none" : "block";
+    li.querySelector(".folder").onclick=()=>{
+      ul.classList.toggle("hidden");
       li.querySelector(".folder").classList.toggle("open");
-      state[f.key] = !open;
-      localStorage.setItem("treeState", JSON.stringify(state));
     };
 
     root.appendChild(li);
   }
 }
 
-function openModal(x) {
-  if (!x || !x.name || !x.url) return;
-  mTitle.textContent = x.name;
-  mNote.textContent = x.note || "";
-  mLink.href = x.url;
-  modal.classList.remove("hidden");
-}
+expandAll.onclick=()=>document.querySelectorAll(".tree ul").forEach(u=>u.classList.remove("hidden"));
+collapseAll.onclick=()=>document.querySelectorAll(".tree ul").forEach(u=>u.classList.add("hidden"));
 
-function closeModal() { modal.classList.add("hidden"); }
-
-modal.onclick = (e) => { if (e.target === modal) closeModal(); };
-closeBtn.onclick = closeModal;
-
-search.oninput = e => renderTree(e.target.value);
-
-// Dark mode (remembered)
-darkToggle.onclick = () => {
-  document.documentElement.classList.toggle("dark");
-  localStorage.setItem("dark", document.documentElement.classList.contains("dark"));
+exportBtn.onclick=async()=>{
+  let rows=["Category,Name,Note,URL"];
+  for(const s of STRUCTURE){
+    const d=await loadJSON(s.key);
+    d.forEach(x=>rows.push(`"${s.title}","${x.name}","${x.note||""}","${x.url||""}"`));
+  }
+  const blob=new Blob([rows.join("\n")],{type:"text/csv"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="bieumau.csv";
+  a.click();
 };
-if (localStorage.getItem("dark") === "true") {
-  document.documentElement.classList.add("dark");
-}
 
-renderTree();
+role.onchange=e=>{ROLE=e.target.value;render();};
+
+darkToggle.onclick=()=>document.documentElement.classList.toggle("dark");
+search.oninput=render;
+
+render();
