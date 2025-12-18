@@ -1,10 +1,9 @@
-// ===== BASE PATH FIX (GitHub Pages + IIS) =====
+// ===== Universal BASE PATH =====
 const BASE_PATH = (() => {
   const p = location.pathname;
   if (p === '/' || p === '/index.html') return '/';
   const parts = p.split('/').filter(Boolean);
-  if (parts.length >= 1) return `/${parts[0]}/`;
-  return '/';
+  return parts.length >= 1 ? `/${parts[0]}/` : '/';
 })();
 
 const STRUCTURE = [
@@ -19,6 +18,45 @@ async function loadJSON(key){
     if(!r.ok) return [];
     return await r.json();
   }catch{return []}
+}
+
+function createFolderNode(title, childrenUl){
+  const span = document.createElement("span");
+  span.className = "node folder";
+
+  const icon = document.createElement("span");
+  icon.className = "folder-icon";
+  icon.textContent = "📁";
+
+  const text = document.createElement("span");
+  text.textContent = title;
+
+  span.appendChild(icon);
+  span.appendChild(text);
+
+  span.onclick = () => {
+    const collapsed = childrenUl.classList.toggle("collapsed");
+    icon.textContent = collapsed ? "📁" : "📂";
+  };
+
+  return span;
+}
+
+function createFileNode(name){
+  const span = document.createElement("span");
+  span.className = "node file";
+
+  const icon = document.createElement("span");
+  icon.className = "file-icon";
+  icon.textContent = "📄";
+
+  const text = document.createElement("span");
+  text.textContent = name;
+
+  span.appendChild(icon);
+  span.appendChild(text);
+
+  return span;
 }
 
 async function render(){
@@ -39,63 +77,38 @@ async function render(){
     if(kw && matched.length === 0) continue;
 
     const li = document.createElement("li");
-    const folder = document.createElement("span");
-    folder.className = "folder";
-    folder.textContent = node.title;
-
     const ul = document.createElement("ul");
+    ul.className = kw ? "" : "collapsed";
 
     matched.forEach(x => {
-      const f = document.createElement("li");
-      f.className = "file";
-      f.textContent = x.name;
-      ul.appendChild(f);
+      const cli = document.createElement("li");
+      cli.appendChild(createFileNode(x.name));
+      ul.appendChild(cli);
     });
 
+    const folderNode = createFolderNode(node.title, ul);
+
     if(kw){
-      ul.style.display = "block";
-      folder.classList.add("open");
+      ul.classList.remove("collapsed");
+      folderNode.querySelector(".folder-icon").textContent = "📂";
     }
 
-    folder.onclick = () => {
-      const open = ul.style.display === "block";
-      ul.style.display = open ? "none" : "block";
-      folder.classList.toggle("open", !open);
-    };
-
-    li.appendChild(folder);
+    li.appendChild(folderNode);
     li.appendChild(ul);
     root.appendChild(li);
   }
 }
 
 expandAll.onclick = () => {
-  document.querySelectorAll(".tree ul").forEach(u => u.style.display = "block");
-  document.querySelectorAll(".folder").forEach(f => f.classList.add("open"));
+  document.querySelectorAll(".tree ul").forEach(ul => ul.classList.remove("collapsed"));
+  document.querySelectorAll(".folder-icon").forEach(i => i.textContent = "📂");
 };
 
 collapseAll.onclick = () => {
-  document.querySelectorAll(".tree ul").forEach(u => u.style.display = "none");
-  document.querySelectorAll(".folder").forEach(f => f.classList.remove("open"));
-};
-
-exportBtn.onclick = async () => {
-  let rows = ["Category,Name,Note,URL"];
-  for(const s of STRUCTURE){
-    const d = await loadJSON(s.key);
-    d.forEach(x =>
-      rows.push(`"${s.title}","${x.name}","${x.note||""}","${x.url||""}"`)
-    );
-  }
-  const blob = new Blob([rows.join("\n")], {type:"text/csv"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "bieumau.csv";
-  a.click();
+  document.querySelectorAll(".tree ul").forEach(ul => ul.classList.add("collapsed"));
+  document.querySelectorAll(".folder-icon").forEach(i => i.textContent = "📁");
 };
 
 search.oninput = render;
-darkToggle.onclick = () =>
-  document.documentElement.classList.toggle("dark");
 
 render();
