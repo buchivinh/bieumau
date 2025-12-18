@@ -7,12 +7,15 @@ const BASE_PATH = (() => {
 })();
 
 const STRUCTURE = [
-  { title: "1. Bổ sung chỉnh sửa", key: "bieumau-bscs" },
-  { title: "2. Đề xuất ý tưởng", key: "bieumau-dxyt" },
-  { title: "3. Đánh giá chất lượng", key: "bieumau-danhgianhanh" }
+  { title: "Bổ sung chỉnh sửa", key: "bieumau-bscs" },
+  { title: "Đề xuất ý tưởng", key: "bieumau-dxyt" },
+  { title: "Đánh giá chất lượng", key: "bieumau-danhgianhanh" }
 ];
 
-let selectedNode = null;
+function clearSelection(){
+  document.querySelectorAll(".node.selected")
+    .forEach(n => n.classList.remove("selected"));
+}
 
 async function loadJSON(key){
   try{
@@ -22,11 +25,7 @@ async function loadJSON(key){
   }catch{return []}
 }
 
-function clearSelection(){
-  document.querySelectorAll(".node.selected").forEach(n=>n.classList.remove("selected"));
-}
-
-function createFolderNode(title, childrenUl){
+function createFolderNode(title, ul){
   const span = document.createElement("span");
   span.className = "node folder";
 
@@ -37,17 +36,16 @@ function createFolderNode(title, childrenUl){
   const text = document.createElement("span");
   text.textContent = title;
 
-  span.appendChild(icon);
-  span.appendChild(text);
+  span.append(icon, text);
 
   span.onclick = (e) => {
     e.stopPropagation();
     clearSelection();
     span.classList.add("selected");
 
-    const collapsed = childrenUl.style.display === "none";
-    childrenUl.style.display = collapsed ? "block" : "none";
-    icon.textContent = collapsed ? "📂" : "📁";
+    const open = ul.style.display === "block";
+    ul.style.display = open ? "none" : "block";
+    icon.textContent = open ? "📁" : "📂";
   };
 
   return span;
@@ -64,17 +62,14 @@ function createFileNode(item){
   const text = document.createElement("span");
   text.textContent = item.name;
 
-  span.appendChild(icon);
-  span.appendChild(text);
+  span.append(icon, text);
 
-  // Single click = select
   span.onclick = (e) => {
     e.stopPropagation();
     clearSelection();
     span.classList.add("selected");
   };
 
-  // Double click = open
   span.ondblclick = (e) => {
     e.stopPropagation();
     if(item.url){
@@ -83,7 +78,6 @@ function createFileNode(item){
   };
 
   span.title = "Double-click để mở biểu mẫu";
-
   return span;
 }
 
@@ -92,8 +86,8 @@ async function render(){
   root.innerHTML = "";
   const kw = search.value.toLowerCase().trim();
 
-  for(const node of STRUCTURE){
-    const data = await loadJSON(node.key);
+  for(const s of STRUCTURE){
+    const data = await loadJSON(s.key);
     if(!Array.isArray(data)) continue;
 
     const matched = kw
@@ -114,28 +108,23 @@ async function render(){
       ul.appendChild(cli);
     });
 
-    const folderNode = createFolderNode(node.title, ul);
+    const folder = createFolderNode(s.title, ul);
+    if(kw) folder.querySelector(".folder-icon").textContent = "📂";
 
-    if(kw){
-      folderNode.querySelector(".folder-icon").textContent = "📂";
-    }
-
-    li.appendChild(folderNode);
-    li.appendChild(ul);
+    li.append(folder, ul);
     root.appendChild(li);
   }
 }
 
 expandAll.onclick = () => {
-  document.querySelectorAll(".tree ul").forEach(ul => ul.style.display = "block");
-  document.querySelectorAll(".folder-icon").forEach(i => i.textContent = "📂");
+  document.querySelectorAll(".tree ul").forEach(ul => ul.style.display="block");
+  document.querySelectorAll(".folder-icon").forEach(i=>i.textContent="📂");
 };
 
 collapseAll.onclick = () => {
-  document.querySelectorAll(".tree ul").forEach(ul => ul.style.display = "none");
-  document.querySelectorAll(".folder-icon").forEach(i => i.textContent = "📁");
+  document.querySelectorAll(".tree ul").forEach(ul => ul.style.display="none");
+  document.querySelectorAll(".folder-icon").forEach(i=>i.textContent="📁");
 };
 
 search.oninput = render;
-
 render();
