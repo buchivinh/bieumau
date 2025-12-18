@@ -2,48 +2,32 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DTSoft</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>BIỂU MẪU (Tree View)</title>
   <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/app.js" defer></script>
 </head>
-<body class="bg-gray-50">
-  <!-- Header -->
-  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center gap-3">
-    <div>
-      <h1 class="text-2xl font-extrabold text-gray-800">DANH MỤC BIỂU MẪU</h1>
-      <p class="text-sm text-slate-500">Chọn 1 danh mục bên dưới để xem danh sách và liên kết.</p>
+<body>
+  <header>
+    <h1>📂 BIỂU MẪU</h1>
+    <div class="actions">
+      <input id="search" placeholder="🔍 Tìm biểu mẫu..." />
+      <button id="darkToggle">🌙</button>
     </div>
   </header>
 
-  <!-- Main -->
-  <main class="max-w-6xl mx-auto px-4 pb-12">
-    <div class="section-sky">
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- Cột 1 -->
-        <a href="list1.html?d=bieumau-bscs" class="container-card card-primary shine p-6 block bg-white rounded-2xl shadow hover:shadow-lg transition">
-          <div class="flex items-center justify-between">
-            <h1 class="text-xl font-semibold text-blue-700"><b>1/Bổ sung chỉnh sửa</b></h1>
-          </div>
-          <p class="mt-2 text-sm text-slate-600"><i>(Nhấp chọn để vào danh sách biểu mẫu bổ sung chỉnh sửa)</i></p>
-        </a>
+  <ul id="tree" class="tree"></ul>
 
-        <!-- Cột 2 -->
-        <a href="list2.html?d=bieumau-dxyt" class="container-card card-primary shine p-6 block bg-white rounded-2xl shadow hover:shadow-lg transition">
-          <div class="flex items-center justify-between">
-            <h1 class="text-xl font-semibold text-blue-700"><b>2/Đề xuất ý tưởng</b></h1>
-          </div>
-          <p class="mt-2 text-sm text-slate-600"><i>(Nhấp chọn để vào danh sách biểu mẫu đề xuất)</i></p>
-        </a>
-		 <!-- Cột 1-1 -->
-        <a href="list3.html?d=bieumau-danhgianhanh" class="container-card card-primary shine p-6 block bg-white rounded-2xl shadow hover:shadow-lg transition">
-          <div class="flex items-center justify-between">
-            <h1 class="text-xl font-semibold text-blue-700"><b>3/Đánh giá chất lượng phần mềm</b></h1>
-          </div>
-          <p class="mt-2 text-sm text-slate-600"><i>(Nhấp chọn để vào danh sách biểu mẫu đánh giá)</i></p>
-        </a>
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <h3 id="mTitle"></h3>
+      <p id="mNote"></p>
+      <div class="modal-actions">
+        <a id="mLink" target="_blank">Mở biểu mẫu</a>
+        <button onclick="closeModal()">Đóng</button>
       </div>
     </div>
-  </main>
+  </div>
 </body>
 </html>
