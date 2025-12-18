@@ -17,6 +17,20 @@ function clearSelection(){
     .forEach(n => n.classList.remove("selected"));
 }
 
+/* ===== PANEL PLACEHOLDER ===== */
+function showPlaceholder(){
+  const panel = document.getElementById("detail");
+  panel.innerHTML = `
+    <div class="detail-box card placeholder">
+      <p>
+        👉 <span style="color:#2563eb; font-weight:600;">
+          Mời bạn chọn một thư mục và nhấn vào biểu mẫu để sử dụng
+        </span>
+      </p>
+    </div>
+  `;
+}
+
 async function loadJSON(key){
   try{
     const r = await fetch(`${BASE_PATH}data/${key}.json`);
@@ -25,12 +39,13 @@ async function loadJSON(key){
   }catch{return []}
 }
 
+/* ===== SHOW FILE DETAIL ===== */
 function showDetail(item){
   const panel = document.getElementById("detail");
   panel.innerHTML = `
-    <div class="detail-box">
-	<h2>${item.name}</h2>
-           <p>${item.note || "Không có mô tả"}</p>
+    <div class="detail-box card">
+      <p><strong>${item.name}</strong></p>
+      <p>${item.note || "Không có mô tả"}</p>
       <div class="detail-actions">
         <a href="${item.url}" target="_blank">Mở biểu mẫu</a>
       </div>
@@ -38,6 +53,7 @@ function showDetail(item){
   `;
 }
 
+/* ===== FOLDER NODE ===== */
 function createFolderNode(title, ul){
   const span = document.createElement("span");
   span.className = "node folder";
@@ -56,6 +72,8 @@ function createFolderNode(title, ul){
     clearSelection();
     span.classList.add("selected");
 
+    showPlaceholder(); // 🔥 chọn thư mục → panel B trống
+
     const open = ul.style.display === "block";
     ul.style.display = open ? "none" : "block";
     icon.textContent = open ? "📁" : "📂";
@@ -64,6 +82,7 @@ function createFolderNode(title, ul){
   return span;
 }
 
+/* ===== FILE NODE ===== */
 function createFileNode(item){
   const span = document.createElement("span");
   span.className = "node file";
@@ -81,7 +100,7 @@ function createFileNode(item){
     e.stopPropagation();
     clearSelection();
     span.classList.add("selected");
-    showDetail(item);
+    showDetail(item); // 🔥 chỉ file mới hiện B
   };
 
   span.ondblclick = (e) => {
@@ -94,6 +113,7 @@ function createFileNode(item){
   return span;
 }
 
+/* ===== RENDER TREE ===== */
 async function render(){
   const root = document.getElementById("tree");
   root.innerHTML = "";
@@ -129,6 +149,18 @@ async function render(){
   }
 }
 
+/* ===== CLICK OUTSIDE → RESET ===== */
+document.addEventListener("click", (e) => {
+  const tree = document.querySelector(".left");
+  const detail = document.querySelector(".right");
+
+  if (!tree.contains(e.target) && !detail.contains(e.target)) {
+    clearSelection();
+    showPlaceholder();
+  }
+});
+
+/* ===== CONTROLS ===== */
 expandAll.onclick = () => {
   document.querySelectorAll(".tree ul").forEach(ul => ul.style.display="block");
   document.querySelectorAll(".folder-icon").forEach(i=>i.textContent="📂");
@@ -140,4 +172,7 @@ collapseAll.onclick = () => {
 };
 
 search.oninput = render;
+
+/* ===== INIT ===== */
+showPlaceholder();
 render();
